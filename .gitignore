@@ -1,0 +1,9 @@
+*~
+*#
+bin/
+pkg/
+github.com
+golang.org
+sourcegraph.com
+gopkg.in
+.vscode/
