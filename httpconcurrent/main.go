@@ -17,14 +17,16 @@ import (
 )
 
 func main() {
-	// readFile()
+	// b := checkDirExist("/Users/macbookpro/git/go/src/httpconcurrent/downloaded")
+	// d := "/Users/macbookpro/git/go/src/httpconcurrent/downloaded"
+	// fmt.Println(b)
 	images := readFile()
 	for _, image := range images {
 		// create downloaded dir if not exist
-		fmt.Println(getWorkingDir() + "downloaded")
-		if _, err := os.Stat(getWorkingDir() + "downloaded"); err == nil {
+		downloadPath := getWorkingDir() + "downloaded"
+		if _, err := os.Stat(downloadPath); err != nil {
 			// if not exist, mkdir
-			err := os.Mkdir(getWorkingDir()+"downloaded", 777)
+			err := os.Mkdir(downloadPath, 0777)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -38,6 +40,15 @@ func main() {
 			continue
 		}
 	}
+}
+
+func checkDirExist(fpath string) bool {
+	dirExist := true
+	if _, err := os.Stat(fpath); err != nil {
+		fmt.Println("dir not exist")
+		dirExist = false
+	}
+	return dirExist
 }
 
 func getSeparator() string {
