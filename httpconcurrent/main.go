@@ -21,6 +21,7 @@ func main() {
 	images := readFile()
 	for _, image := range images {
 		// create downloaded dir if not exist
+		fmt.Println(getWorkingDir() + "downloaded")
 		if _, err := os.Stat(getWorkingDir() + "downloaded"); err == nil {
 			// if not exist, mkdir
 			err := os.Mkdir(getWorkingDir()+"downloaded", 777)
