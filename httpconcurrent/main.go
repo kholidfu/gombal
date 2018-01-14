@@ -9,11 +9,24 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"runtime"
 	"strings"
 	"time"
 
 	"github.com/mreiferson/go-httpclient"
 )
+
+func getSeparator() string {
+	var sep string
+	myOS := runtime.GOOS
+
+	if myOS == "windows" {
+		sep = "\\"
+	} else {
+		sep = "/"
+	}
+	return sep
+}
 
 func main() {
 	// readFile()
@@ -22,7 +35,7 @@ func main() {
 		image = strings.TrimRight(image, "\r\n")
 		fmt.Printf("downloading %s\n", image)
 		fname := getFileName(image)
-		err := download("/tmp/"+fname, image)
+		err := download(getWorkingDir()+"downloaded"+getSeparator()+fname, image)
 		if err != nil {
 			fmt.Println(err)
 			continue
@@ -32,6 +45,19 @@ func main() {
 
 func getFileName(url string) string {
 	return path.Base(url)
+}
+
+func getWorkingDir() string {
+	var wd string
+	myOS := runtime.GOOS
+	targetDir, _ := os.Getwd()
+
+	if myOS == "windows" {
+		wd = strings.Join([]string{targetDir, "src", "httpconcurrent" + getSeparator()}, "\\")
+	} else {
+		wd = strings.Join([]string{targetDir, "src", "httpconcurrent" + getSeparator()}, "/")
+	}
+	return wd
 }
 
 var timeout = time.Duration(2 * time.Second)
@@ -79,7 +105,9 @@ func readFile() []string {
 	var images []string
 	var line string
 
-	pathToFile := strings.Join([]string{"/home", "kholidfu", "Desktop", "images.txt"}, "/")
+	wd := getWorkingDir()
+	pathToFile := wd + "images.txt"
+
 	// check if file exist
 	if _, err := os.Stat(pathToFile); err == nil {
 		// read the file
