@@ -5,7 +5,12 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
 )
+
+func getFileName(url string) string {
+	return path.Base(url)
+}
 
 func downloadFile(fpath, url string) (err error) {
 	// Create the file
@@ -31,7 +36,9 @@ func downloadFile(fpath, url string) (err error) {
 }
 
 func main() {
-	err := downloadFile("./src/downloader/gopher.jpg", "https://vorozhko.net/wp-content/uploads/2017/11/gophercon2015.jpg")
+	url := "https://vorozhko.net/wp-content/uploads/2017/11/gophercon2015.jpg"
+	fname := getFileName(url)
+	err := downloadFile("./src/downloader/"+fname, url)
 	if err != nil {
 		log.Fatal(err)
 	}
