@@ -16,7 +16,7 @@ import (
 )
 
 func main() {
-	readFile()
+	// readFile()
 	images := readFile()
 	for _, image := range images {
 		image = strings.TrimRight(image, "\r\n")
@@ -98,6 +98,8 @@ func readFile() []string {
 				break
 			}
 		}
+	} else {
+		fmt.Println("file not exist")
 	}
 	return images
 }
