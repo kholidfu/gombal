@@ -6,4 +6,5 @@ github.com
 golang.org
 sourcegraph.com
 gopkg.in
+httpconcurrent/downloaded/*
 .vscode/
