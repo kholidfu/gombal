@@ -16,6 +16,29 @@ import (
 	"github.com/mreiferson/go-httpclient"
 )
 
+func main() {
+	// readFile()
+	images := readFile()
+	for _, image := range images {
+		// create downloaded dir if not exist
+		if _, err := os.Stat(getWorkingDir() + "downloaded"); err == nil {
+			// if not exist, mkdir
+			err := os.Mkdir(getWorkingDir()+"downloaded", 777)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+		image = strings.TrimRight(image, "\r\n")
+		fmt.Printf("downloading %s\n", image)
+		fname := getFileName(image)
+		err := download(getWorkingDir()+"downloaded"+getSeparator()+fname, image)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+	}
+}
+
 func getSeparator() string {
 	var sep string
 	myOS := runtime.GOOS
@@ -26,21 +49,6 @@ func getSeparator() string {
 		sep = "/"
 	}
 	return sep
-}
-
-func main() {
-	// readFile()
-	images := readFile()
-	for _, image := range images {
-		image = strings.TrimRight(image, "\r\n")
-		fmt.Printf("downloading %s\n", image)
-		fname := getFileName(image)
-		err := download(getWorkingDir()+"downloaded"+getSeparator()+fname, image)
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-	}
 }
 
 func getFileName(url string) string {
