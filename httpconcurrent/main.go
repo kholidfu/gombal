@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"path"
 	"strings"
 	"time"
+
+	"github.com/mreiferson/go-httpclient"
 )
 
 func main() {
@@ -21,13 +24,20 @@ func main() {
 		fname := getFileName(image)
 		err := download("/tmp/"+fname, image)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
+			continue
 		}
 	}
 }
 
 func getFileName(url string) string {
 	return path.Base(url)
+}
+
+var timeout = time.Duration(2 * time.Second)
+
+func dialTimeout(network, addr string) (net.Conn, error) {
+	return net.DialTimeout(network, addr, timeout)
 }
 
 func download(fpath, url string) (err error) {
@@ -38,15 +48,19 @@ func download(fpath, url string) (err error) {
 	}
 	defer out.Close()
 
-	// set timeout
-	timeout := time.Duration(5 * time.Second)
-	client := http.Client{
-		Timeout: timeout,
+	// set http request with timeout for each request
+	transport := &httpclient.Transport{
+		ConnectTimeout:        1 * time.Second,
+		RequestTimeout:        10 * time.Second,
+		ResponseHeaderTimeout: 5 * time.Second,
 	}
+	defer transport.Close()
 	// Get the data
-	resp, err := client.Get(url)
+	client := &http.Client{Transport: transport}
+	req, _ := http.NewRequest("GET", url, nil)
+	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer resp.Body.Close()
 
