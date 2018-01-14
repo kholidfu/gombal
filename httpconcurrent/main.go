@@ -9,6 +9,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -37,10 +38,15 @@ func download(fpath, url string) (err error) {
 	}
 	defer out.Close()
 
+	// set timeout
+	timeout := time.Duration(5 * time.Second)
+	client := http.Client{
+		Timeout: timeout,
+	}
 	// Get the data
-	resp, err := http.Get(url)
+	resp, err := client.Get(url)
 	if err != nil {
-		return err
+		log.Fatal(err)
 	}
 	defer resp.Body.Close()
 
