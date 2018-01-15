@@ -13,6 +13,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gosimple/slug"
 	"github.com/mreiferson/go-httpclient"
 )
 
@@ -64,7 +65,8 @@ func getSeparator() string {
 }
 
 func getFileName(url string) string {
-	return path.Base(url)
+	sluggedFName := slug.Make(path.Base(url))
+	return path.Base(sluggedFName)
 }
 
 func getWorkingDir() string {
