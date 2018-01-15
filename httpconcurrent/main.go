@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
@@ -65,8 +66,11 @@ func getSeparator() string {
 }
 
 func getFileName(url string) string {
-	sluggedFName := slug.Make(path.Base(url))
-	return path.Base(sluggedFName)
+	rawFName := path.Base(url)
+	ext := filepath.Ext(rawFName)
+	fname := strings.Split(rawFName, ext)
+	sluggedFName := slug.Make(fname[0])
+	return sluggedFName + ext
 }
 
 func getWorkingDir() string {
