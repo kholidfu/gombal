@@ -15,7 +15,7 @@ func checkStatus(url string, ch chan<- int) {
 }
 
 func main() {
-	urls := []string{"https://www.google.com", "https://mslib.co", "https://www.decorpad.com"}
+	urls := []string{"https://www.google.com", "https://mslib.co", "https://88gram.com"}
 	ch := make(chan int)
 	for _, url := range urls {
 		go checkStatus(url, ch)
