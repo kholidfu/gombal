@@ -23,7 +23,8 @@ func main() {
 		"https://www.duckduckgo.com",
 		"https://www.golang.org",
 		"https://www.github.com",
-		"https://www.python.org"}
+		"https://www.python.org",
+	}
 	ch := make(chan int)
 	for _, url := range urls {
 		go checkStatus(url, ch)
