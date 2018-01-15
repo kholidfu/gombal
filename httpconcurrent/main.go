@@ -19,9 +19,6 @@ import (
 )
 
 func main() {
-	// b := checkDirExist("/Users/macbookpro/git/go/src/httpconcurrent/downloaded")
-	// d := "/Users/macbookpro/git/go/src/httpconcurrent/downloaded"
-	// fmt.Println(b)
 	images := readFile()
 	for _, image := range images {
 		// create downloaded dir if not exist
