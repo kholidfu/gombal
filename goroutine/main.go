@@ -6,12 +6,12 @@ import (
 	"net/http"
 )
 
-func checkStatus(url string, ch chan<- int) {
+func checkStatus(url string, ch chan<- string) {
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Fatal(err)
 	}
-	ch <- resp.StatusCode
+	ch <- fmt.Sprintf("%s status is: %d", url, resp.StatusCode)
 }
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 		"https://www.github.com",
 		"https://www.python.org",
 	}
-	ch := make(chan int, len(urls))
+	ch := make(chan string, len(urls))
 	for _, url := range urls {
 		go checkStatus(url, ch)
 	}
